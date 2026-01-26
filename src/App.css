@@ -15,16 +15,7 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50 antialiased;
-    font-family: var(--font-sans);
-  }
 
-  body {
-    @apply bg-background text-foreground;
-  }
-}
 
 
 :root {
