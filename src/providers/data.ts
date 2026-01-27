@@ -1,23 +1,34 @@
+import { createDataProvider, CreateDataProviderOptions } from "@refinedev/rest";
+import { BACKEND_BASE_URL } from "../constants";
+import { ListResponse } from "@/types";
 
-import { DataProvider, BaseRecord, GetListParams, GetListResponse } from "@refinedev/core";
-import { MOCK_SUBJECTS } from "@/constants";
+const options: CreateDataProviderOptions = {
+  getList: {
+    getEndpoint: (resource) => {
+      console.log("getEndpoint called with resource:", resource, "type:", typeof resource);
+      let name = "";
+      if (typeof resource === "string") {
+        name = resource;
+      } else if (resource && typeof resource === "object") {
+        // Extract from nested resource property or direct name/route
+        name = (resource as any).resource || (resource as any).name || (resource as any).route || "";
+      }
+      const endpoint = String(name).replace(/^\/+/, "");
+      console.log("getEndpoint returning:", endpoint);
+      return endpoint;
+    },
 
-export const dataProvider: DataProvider = {
-  getList: async <TData extends BaseRecord = BaseRecord>({ resource }: GetListParams): Promise<GetListResponse<TData>> => {
-    if (resource !== 'subjects') {
-      return { data: [] as TData[], total: 0 };
-    }
-    return {
-      data: MOCK_SUBJECTS as unknown as TData[],
-      total: MOCK_SUBJECTS.length,
-    }
-  },
-
-  getOne: async () => { throw new Error("This function is not present in mock") },
-  create: async () => { throw new Error("This function is not present in mock") },
-  update: async () => { throw new Error("This function is not present in mock") },
-  delete: async () => { throw new Error("This function is not present in mock") },
-  deleteMany: async () => { throw new Error("This function is not present in mock") },
-
-  getApiUrl: () => "",
+    mapResponse: async (response) => {
+      const payload: ListResponse = await response.json();
+      console.log("Response data:", payload);
+      return payload.data ?? [];
+    },
+  }
 }
+
+console.log("BACKEND_BASE_URL initialized as:", BACKEND_BASE_URL);
+
+// Create and export the data provider.
+const { dataProvider } = createDataProvider(BACKEND_BASE_URL.replace(/\/$/, ""), options);
+
+export { dataProvider };
