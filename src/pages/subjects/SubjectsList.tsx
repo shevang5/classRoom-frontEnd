@@ -38,14 +38,14 @@ const SubjectsList = () => {
                 id: "code",
                 accessorKey: "code",
                 size: 100,
-                header: <p className='column-title ml-2'>code</p>,
+                header: () => <p className='column-title ml-2'>code</p>,
                 cell: ({ getValue }) => <Badge>{getValue<string>()}</Badge>
             },
             {
                 id: "name",
                 accessorKey: "name",
                 size: 200,
-                header: <p className='column-title ml-2'>name</p>,
+                header: () => <p className='column-title ml-2'>name</p>,
                 cell: ({ getValue }) => <span className="text-foreground">{getValue<string>()}</span>,
                 filterFn: 'includesString'
 
@@ -54,14 +54,14 @@ const SubjectsList = () => {
                 id: "department",
                 accessorKey: "department.name",
                 size: 150,
-                header: <p className='column-title ml-2'>department</p>,
+                header: () => <p className='column-title ml-2'>department</p>,
                 cell: ({ getValue }) => <Badge variant="secondary">{getValue<string>()}</Badge>
             },
             {
                 id: 'description',
                 accessorKey: 'description',
                 size: 300,
-                header: <p className='column-title ml-2'>description</p>,
+                header: () => <p className='column-title ml-2'>description</p>,
                 cell: ({ getValue }) => <span className="truncate line-clamp-2">{getValue<string>()}</span>,
                 filterFn: 'includesString'
             }
